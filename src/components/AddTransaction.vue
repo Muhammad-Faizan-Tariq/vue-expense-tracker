@@ -4,11 +4,13 @@
       <h2 class="font-semibold text-lg">Add new transaction</h2>
     </div>
     <div class="bg-white p-4 border-2 rounded-md">
-      <form>
+      <form id="form" @submit.prevent="onSubmit">
         <div class="my-5 text-sm">
           <label for="text" class="block text-black">Text</label>
           <input
             type="text"
+            id="text"
+            v-model="text"
             autofocus
             class="rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-100 w-full"
             placeholder="Enter Text"
@@ -25,7 +27,9 @@
             </small>
           </label>
           <input
-            type="number"
+            type="text"
+            id="amount"
+            v-model="amount"
             autofocus
             class="rounded-sm px-4 py-3 mt-1 focus:outline-none bg-gray-100 w-full"
             placeholder="Enter Amount"
@@ -42,3 +46,23 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useToast } from "vue-toastification";
+
+const text = ref("");
+const amount = ref("");
+const toast = useToast();
+
+const onSubmit = () => {
+  if (!text.value || !amount.value) {
+    toast.error("Both field are required");
+    return;
+  }
+  console.log("Text:", text.value);
+  console.log("Text:", amount.value);
+  text.value = "";
+  amount.value = "";
+};
+</script>

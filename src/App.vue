@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div class="flex justify-center items-center">
     <div class="max-w-lg w-full">
       <Header />
       <Balance :total="total" />
