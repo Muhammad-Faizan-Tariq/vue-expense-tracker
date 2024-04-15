@@ -2,10 +2,11 @@
   <div class="flex justify-center items-center">
     <div class="max-w-lg w-full">
       <Header />
-      <Balance :total="total" />
+      <Balance :total="+total" />
       <IncomeExpenses :income="+income" :expense="+expense" />
-      <TransactionList :transactions="transactions" />
-      <AddTransaction />
+      <TransactionList :transactions="transactions"
+      @transactionDeleted="handleTransactionDeleted" />
+      <AddTransaction @transactionSubmitted="handleSubmitTransaction" />
     </div>
   </div>
 </template>
@@ -17,6 +18,7 @@ import Header from "./components/Header.vue";
 import IncomeExpenses from "./components/IncomeExpenses.vue";
 import TransactionList from "./components/TransactionList.vue";
 import { ref, computed } from "vue";
+import {useToast} from "vue-toastification";
 
 const transactions = ref([
   { id: 1, text: "Flower", amount: -23 },
@@ -24,6 +26,8 @@ const transactions = ref([
   { id: 3, text: "Register", amount: -90 },
   { id: 4, text: "Amount", amount: 123 },
 ]);
+
+const toast = useToast()
 
 const total = computed(() => {
   return transactions.value
@@ -50,4 +54,26 @@ const expense = computed(() => {
     }, 0)
     .toFixed(2);
 });
+
+const handleSubmitTransaction = (transactionData) => {
+    console.log("Transaction Data:", transactionData)
+    transactions.value.push({
+      id: generateUniqueId(),
+      text: transactionData.text,
+      amount: transactionData.amount
+    });
+    toast.success("Transaction Added")
+}
+
+const generateUniqueId = () => {
+  return Math.floor(Math.random() * 1000)
+}
+
+const handleTransactionDeleted = (id) => {
+  console.log(id)
+  transactions.value = transactions.value.filter((transaction)=>
+    transaction.id !== id
+  )
+  toast.success("Transaction deleted")
+}
 </script>

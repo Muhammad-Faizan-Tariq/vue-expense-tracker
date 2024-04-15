@@ -10,11 +10,12 @@
       class="ml-6 relative bg-white p-4 border-r-8 shadow-md my-4 flex justify-between"
     >
       <div class="absolute -left-6">
-        <div
+        <button
+          @click="deletedTransation(item.id)"
           class="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center"
         >
           x
-        </div>
+        </button>
       </div>
       <div>
         <p>{{ item.text }}</p>
@@ -29,10 +30,16 @@
 <script setup>
 import { defineProps } from "vue";
 
+const emit  = defineEmits(["transactionDeleted"])
+
 const props = defineProps({
   transactions: {
     type: Array,
     required: true,
   },
 });
+
+const deletedTransation = (id) => {
+  emit("transactionDeleted", id)
+}
 </script>
